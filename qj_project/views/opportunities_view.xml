@@ -1,0 +1,31 @@
+
+<openerp>
+	<data>
+
+		<!--view -->
+
+		<record model="ir.ui.view" id="opp_form_view">
+			<field name="name">crm.lead.common.form.inherit</field>
+			<field name="model">crm.lead</field>
+			<field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+			<field name="arch" type="xml">
+				<notebook position="inside">
+					<page string="portfolio" col="2">
+						<field name="product_ids" domain="[('is_property','=',True)]">
+							<tree string="portfolio">
+								<field name="name" />
+								<field name="number" />
+								<field name="sqm" />
+								<field name="floor" />
+								<field name="state" />
+								<button name="reserve_product" string="Reserve Products"
+									type="object" icon="terp-gtk-jump-to-ltr" />
+							</tree>
+
+						</field>
+					</page>
+				</notebook>
+			</field>
+		</record>
+	</data>
+</openerp>

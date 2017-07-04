@@ -1,0 +1,15 @@
+<openerp>
+	<data>
+		<!--view -->
+		<record model="ir.ui.view" id="analyatic_form_view">
+			<field name="name">analytic.form.inherited</field>
+			<field name="model">account.analytic.account</field>
+			<field name="inherit_id" ref="analytic.view_account_analytic_account_form" />
+			<field name="arch" type="xml">
+				 <field name="manager_id" position="after"> 
+                <field name="rent_id"  invisible="1"/>   
+            </field>
+			</field>
+		</record>
+	</data>
+</openerp>

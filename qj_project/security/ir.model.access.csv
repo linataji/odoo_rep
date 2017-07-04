@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_new_modue_new_modue,new_modue.new_modue,model_new_modue_new_modue,,1,0,0,0

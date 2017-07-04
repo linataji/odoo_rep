@@ -1,0 +1,199 @@
+<openerp>
+	<data>
+
+		<!-- view -->
+		<record model="ir.ui.view" id="project_tree_view">
+			<field name="name">project.tree</field>
+			<field name="model">qj.project</field>
+			<field name="arch" type="xml">
+				<tree string="Projects">
+					<field name="name" />
+					<field name="area" />
+					<field name="start_date" />
+					<field name="end_date" />
+					<field name="number_of_portfolio" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="project_form_view">
+			<field name="name">project.form</field>
+			<field name="model">qj.project</field>
+			<field name="arch" type="xml">
+				<form string="Projects">
+					<header>
+						<button string="Set As New" type="object" name="set_new"
+							states="Cancel" />
+						<button string="In Progress" type="object" name="set_in_progress"
+							states="New" />
+						<button string="Done" type="object" name="set_done" states="In Progress" />
+						<button string="Cancel" type="object" name="set_cancel" />
+						<field name="state" widget="statusbar" statusbar_visible="New,In Progress,Done" />
+					</header>
+					<sheet>
+						<group colspan="4" col="4">
+							<h1>
+								<field name="name" placeholder="Name" style="width:50%%" />
+							</h1>
+						</group>
+						<group string="Information">
+							<group colspan="4" col="4">
+								<field name="start_date" />
+								<field name="number_of_portfolio" />
+								<field name="end_date" />
+							</group>
+							<group col="2">
+								<field name="area" />
+							</group>
+						</group>
+						<group>
+							<field name="product_ids" domain="[('is_property','=',True)]">
+								<tree string="portfolio">
+									<field name="name" />
+									<field name="number" />
+									<field name="sqm" />
+									<field name="floor" />
+									<field name="state" />
+									<field name="layout" />
+								</tree>
+							</field>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="project_search_view">
+			<field name="name">project.search</field>
+			<field name="model">qj.project</field>
+			<field name="arch" type="xml">
+				<search string="Projects">
+					<field name="name" />
+					<field name="area" />
+					<field name="start_date" />
+					<field name="end_date" />
+					<field name="state" />
+					<field name="number_of_portfolio" />
+					<group expand="0" string="Group By">
+						<filter string="Start Date" context="{'group_by' : 'start_date'}" />
+						<filter string="End Date" context="{'group_by' : 'end_date'}" />
+						<filter string="Status" context="{'group_by' : 'state'}" />
+					</group>
+					<separator />
+					<filter string="New" name="state" domain="[('state', '=', 'New')]" />
+					<filter string="In Progress" name="state"
+						domain="[('state', '=', 'In Progress')]" />
+					<filter string="Cancel" name="state" domain="[('state', '=', 'Cancel')]" />
+					<filter string="Done" name="state" domain="[('state', '=', 'Done')]" />
+				</search>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="project_kanban_view">
+			<field name="name">project.kanban</field>
+			<field name="model">qj.project</field>
+			<field name="type">kanban</field>
+			<field name="arch" type="xml">
+				<kanban>
+					<field name="name" />
+					<templates>
+						<t t-name="kanban-box">
+							<div class="oe_module_desc">
+								<div
+									class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
+
+									<table class="oe_kanban_table">
+										<th>
+											<a type="open">
+												<t>
+													<img
+														t-att-src="kanban_image('product.product', 'image_small', record.id.value)"
+														class="oe_kanban_image" />
+												</t>
+											</a>
+										</th>
+										<th>
+											<td class="oe_kanban_title1" align="left" valign="middle">
+												<h4>
+													<a type="open">
+														<field name="name" />
+													</a>
+												</h4>
+
+												<div t-if="record.end_date.raw_value">
+													Start Date:
+													<field name="start_date" />
+												</div>
+												<div t-if="record.end_date.raw_value">
+													End Date:
+													<field name="end_date" />
+												</div>
+											</td>
+										</th>
+									</table>
+								</div>
+							</div>
+						</t>
+					</templates>
+				</kanban>
+			</field>
+		</record>
+
+
+		<record id="project_gantt_view" model="ir.ui.view">
+			<field name="name">Project Gantt</field>
+			<field name="model">qj.project</field>
+			<field name="arch" type="xml">
+				<gantt date_stop="end_date" date_start="start_date" progress="progress"
+					string="Project date" />
+			</field>
+		</record>
+		
+		<!-- action -->
+		<record model="ir.actions.act_window" id="project_action">
+			<field name="name">Project</field>
+			<field name="res_model">qj.project</field>
+			<field name="view_mode">tree,form,kanban,gantt</field>
+			<field eval="False" name="view_id" />
+		</record>
+
+		<record id="project_tree_view_action" model="ir.actions.act_window.view">
+			<field eval="1" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="project_tree_view" />
+			<field name="act_window_id" ref="project_action" />
+		</record>
+
+		<record id="project_form_view_action" model="ir.actions.act_window.view">
+			<field eval="2" name="sequence" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="project_form_view" />
+			<field name="act_window_id" ref="project_action" />
+		</record>
+		
+		<record id="project_kanaban_view_action" model="ir.actions.act_window.view">
+			<field eval="3" name="sequence" />
+			<field name="view_mode">kanban</field>
+			<field name="view_id" ref="project_kanban_view" />
+			<field name="act_window_id" ref="project_action" />
+		</record>
+
+		<record model="ir.actions.act_window.view" id="action_project_gantt">
+			<field name="sequence" eval="4" />
+			<field name="view_mode">gantt</field>
+			<field name="view_id" ref="project_gantt_view" />
+			<field name="act_window_id" ref="project_action" />
+		</record>
+
+		<!-- menuitem: -->
+
+		<menuitem id="project_base" name="Projects"></menuitem>
+		<menuitem id="project_parent" name="Projects" parent="project_base"></menuitem>
+		<menuitem id="project_menu" name="Projects" parent="project_parent"
+			action="project_action"></menuitem>
+
+
+
+	</data>
+</openerp>
